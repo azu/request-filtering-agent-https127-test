@@ -1,0 +1,18 @@
+{
+  "name": "request-filtering-agent-test",
+  "version": "1.0.0",
+  "description": "Test for request-filtering-agent 127.0.0.1 vulnerability",
+  "main": "client.js",
+  "scripts": {
+    "test:old": "npm install request-filtering-agent@1.1.2 && node client.js",
+    "test:latest": "npm install request-filtering-agent@latest && node client.js",
+    "server": "node server.js",
+    "test": "echo 'Run npm run server in one terminal, then npm run test:old or test:latest in another'"
+  },
+  "dependencies": {
+    "request-filtering-agent": "^1.1.2"
+  },
+  "devDependencies": {},
+  "author": "",
+  "license": "MIT"
+}
