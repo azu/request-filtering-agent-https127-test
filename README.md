@@ -45,10 +45,21 @@ Expected output:
 
 ## Files
 
-- `server.js` - Simple HTTP server for testing
+- `server.js` - HTTP/HTTPS test server
 - `client.js` - Test client that uses `request-filtering-agent`
 - `package.json` - Dependencies and test scripts
+- `generate-cert.js` - Certificate generator for HTTPS testing
 
+## Certificate Setup
+
+For HTTPS testing, generate self-signed certificates:
+```bash
+# Option 1: Use OpenSSL
+openssl req -x509 -newkey rsa:2048 -nodes -sha256 -subj '/CN=localhost' -keyout key.pem -out cert.pem -days 365
+
+# Option 2: Use the included generator
+node generate-cert.js
+```
 ## Security Impact
 
 Applications using `request-filtering-agent` v1.1.2 or earlier are vulnerable to SSRF attacks via `127.0.0.1` URLs. This could allow attackers to:
