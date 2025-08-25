@@ -2,9 +2,22 @@
 
 This repository demonstrates a vulnerability in `request-filtering-agent` v1.1.2 where requests to `127.0.0.1` are incorrectly allowed instead of being blocked.
 
+[request-filtering-agent](https://github.com/azu/request-filtering-agent) v2+ has fixed this issue.
+
 ## The Issue
 
-In `request-filtering-agent` v1.1.2, URLs with `127.0.0.1` (localhost IP) bypass the security filter and are treated as safe, when they should be blocked like other local addresses. This affects both HTTP and HTTPS requests. This vulnerability has been silently fixed in later versions, but without security advisories or Dependabot alerts, users remain unaware and vulnerable.
+In `request-filtering-agent` v1.1.2, HTTPS URLs with `127.0.0.1` (localhost IP) bypass the security filter and are treated as safe, when they should be blocked like other local addresses. 
+
+### Root Cause
+
+The vulnerability occurs due to how Node.js handles HTTPS connections differently from HTTP:
+
+1. **HTTP connections**: The `connectionListener` callback in `createConnection` is called, which triggers the IP address validation
+2. **HTTPS connections**: The `connectionListener` callback is NOT called during TLS setup, bypassing the IP address validation for direct IP addresses like `127.0.0.1`
+
+This means that while HTTP requests to `127.0.0.1` are properly blocked, HTTPS requests to the same address are allowed through.
+
+This vulnerability has been silently fixed in later versions, but without security advisories or Dependabot alerts, users remain unaware and vulnerable.
 
 ## How to Test
 

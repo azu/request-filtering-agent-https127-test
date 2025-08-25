@@ -8,20 +8,25 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 // Test function
 async function testRequest(url) {
   return new Promise((resolve) => {
-    const agent = useAgent(url);
-    const client = url.startsWith('https') ? https : http;
-    
-    client.get(url, { agent }, (res) => {
-      let data = '';
-      res.on('data', (chunk) => data += chunk);
-      res.on('end', () => {
-        console.log(`✅ ${url} - ALLOWED`);
-        resolve(true);
+    try {
+      const agent = useAgent(url);
+      const client = url.startsWith('https') ? https : http;
+      
+      client.get(url, { agent }, (res) => {
+        let data = '';
+        res.on('data', (chunk) => data += chunk);
+        res.on('end', () => {
+          console.log(`✅ ${url} - ALLOWED`);
+          resolve(true);
+        });
+      }).on('error', (error) => {
+        console.log(`❌ ${url} - BLOCKED: ${error.message}`);
+        resolve(false);
       });
-    }).on('error', (error) => {
+    } catch (error) {
       console.log(`❌ ${url} - BLOCKED: ${error.message}`);
       resolve(false);
-    });
+    }
   });
 }
 
