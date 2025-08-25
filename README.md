@@ -17,8 +17,6 @@ The vulnerability occurs due to how Node.js handles HTTPS connections differentl
 
 This means that while HTTP requests to `127.0.0.1` are properly blocked, HTTPS requests to the same address are allowed through.
 
-This vulnerability has been silently fixed in later versions, but without security advisories or Dependabot alerts, users remain unaware and vulnerable.
-
 ## How to Test
 
 ### 1. Install dependencies
